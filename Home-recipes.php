@@ -166,9 +166,37 @@ $uploadPathBase = "admin/manages/recipes/uploads/recipes/";
 
         </div>
 
+        <!-- View All Recipes Button -->
+        <div class="text-center" style="margin-top: 50px;">
+            <a href="recipes.php" class="view-all-recipes-btn">
+                View All Recipes
+                <i class="fa fa-arrow-right" style="margin-left:8px;"></i>
+            </a>
+        </div>
+
     </div>
 
 </section>
+
+<style>
+.view-all-recipes-btn {
+    display: inline-block;
+    background: #b0284b;
+    color: #fff !important;
+    padding: 14px 36px;
+    border-radius: 40px;
+    font-size: 16px;
+    font-weight: 700;
+    text-decoration: none !important;
+    transition: background 0.3s, transform 0.2s;
+    letter-spacing: 0.5px;
+}
+
+.view-all-recipes-btn:hover {
+    background: #7a1a32;
+    transform: translateY(-2px);
+}
+</style>
 
 <style>
 

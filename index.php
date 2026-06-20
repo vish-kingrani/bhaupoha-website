@@ -78,6 +78,10 @@ $stats = $pdo->query("
                                 </li>
 
                                 <li class="dropdown mm-menu">
+                                    <a href="recipes.php" style="color: rgb(168, 45, 73);">Recipes</a>
+                                </li>
+
+                                <li class="dropdown mm-menu">
                                     <a class="page-scroll" href="#contact" style="color: rgb(168, 45, 73);">Contact Us</a>
                                 </li>
                             </ul>
