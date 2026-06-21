@@ -142,77 +142,84 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     */
 
     if (empty($errors)) {
-        /*
-        |--------------------------------------------------------------------------
-        | UPDATE
-        |--------------------------------------------------------------------------
-        */
 
-        if ($isEdit) {
-            $query = "UPDATE recipes SET
-                        recipe_name=?,
-                        category=?,
-                        recipe_image=?,
-                        ingredients=?,
-                        instructions=?,
-                        cooking_time=?,
-                        servings=?,
-                        status=?
-                        WHERE id=?";
+        try {
 
-            $stmt = $pdo->prepare($query);
+            /*
+            |--------------------------------------------------------------------------
+            | UPDATE
+            |--------------------------------------------------------------------------
+            */
 
-            $stmt->execute([
-                $recipe_name,
-                $category,
-                $imageName,
-                $ingredients,
-                $instructions,
-                $cooking_time,
-                $servings,
-                $status,
-                $id
-            ]);
+            if ($isEdit) {
+                $query = "UPDATE recipes SET
+                            recipe_name=?,
+                            category=?,
+                            recipe_image=?,
+                            ingredients=?,
+                            instructions=?,
+                            cooking_time=?,
+                            servings=?,
+                            status=?
+                            WHERE id=?";
 
-            $success = "Recipe updated successfully!";
+                $stmt = $pdo->prepare($query);
+
+                $stmt->execute([
+                    $recipe_name,
+                    $category,
+                    $imageName,
+                    $ingredients,
+                    $instructions,
+                    $cooking_time,
+                    $servings,
+                    $status,
+                    $id
+                ]);
+
+                $success = "Recipe updated successfully!";
+
+            /*
+            |--------------------------------------------------------------------------
+            | INSERT
+            |--------------------------------------------------------------------------
+            */
+            } else {
+                $query = "INSERT INTO recipes
+                (
+                    recipe_name,
+                    category,
+                    recipe_image,
+                    ingredients,
+                    instructions,
+                    cooking_time,
+                    servings,
+                    status
+                )
+                VALUES (?,?,?,?,?,?,?,?)";
+
+                $stmt = $pdo->prepare($query);
+
+                $stmt->execute([
+                    $recipe_name,
+                    $category,
+                    $imageName,
+                    $ingredients,
+                    $instructions,
+                    $cooking_time,
+                    $servings,
+                    $status
+                ]);
+
+                $success = "Recipe added successfully!";
+            }
+
+            header("Refresh:1; url=../manage-recipes.php");
+
+        } catch (\PDOException $e) {
+            $errors[] = "Database error: " . $e->getMessage();
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | INSERT
-        |--------------------------------------------------------------------------
-        */ else {
-            $query = "INSERT INTO recipes
-            (
-                recipe_name,
-                category,
-                recipe_image,
-                ingredients,
-                instructions,
-                cooking_time,
-                servings,
-                status
-            )
-
-            VALUES (?,?,?,?,?,?,?,?)";
-
-            $stmt = $pdo->prepare($query);
-
-            $stmt->execute([
-                $recipe_name,
-                $category,
-                $imageName,
-                $ingredients,
-                $instructions,
-                $cooking_time,
-                $servings,
-                $status
-            ]);
-
-            $success = "Recipe added successfully!";
-        }
-
-        header("Refresh:1; url=../manage-recipes.php");
     }
 }
 ?>
@@ -247,6 +254,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body class="bg-[#f3f4f6] min-h-screen">
 
 <div class="max-w-[1400px] mx-auto px-6 py-8">
+
+    <?php if (!empty($errors)): ?>
+        <div style="background:#fef2f2;border:1px solid #fca5a5;color:#b91c1c;padding:16px 20px;border-radius:12px;margin-bottom:24px;">
+            <strong style="display:block;margin-bottom:6px;">⚠️ Please fix the following errors:</strong>
+            <ul style="margin:0;padding-left:20px;">
+                <?php foreach ($errors as $err): ?>
+                    <li><?= htmlspecialchars($err); ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php endif; ?>
+
+    <?php if (!empty($success)): ?>
+        <div style="background:#f0fdf4;border:1px solid #86efac;color:#166534;padding:16px 20px;border-radius:12px;margin-bottom:24px;">
+            ✅ <?= htmlspecialchars($success); ?> Redirecting…
+        </div>
+    <?php endif; ?>
 
     <!-- Desktop Header -->
     <div class="flex justify-between items-end mb-8 border-b border-gray-200 pb-6">
